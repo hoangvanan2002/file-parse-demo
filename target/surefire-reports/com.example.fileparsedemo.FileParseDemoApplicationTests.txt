@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: com.example.fileparsedemo.FileParseDemoApplicationTests
+-------------------------------------------------------------------------------
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 2.650 s -- in com.example.fileparsedemo.FileParseDemoApplicationTests
