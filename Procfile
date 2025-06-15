@@ -1,0 +1,1 @@
+web: java -jar target/file-parse-demo-0.0.1-SNAPSHOT.jar
