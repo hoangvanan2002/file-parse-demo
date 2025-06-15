@@ -6,7 +6,7 @@ WORKDIR /app
 COPY target/file-parse-demo-0.0.1-SNAPSHOT.jar app.jar
 
 # Expose Spring Boot port
-EXPOSE 8080
+EXPOSE 8088
 
 # Run the application
 ENTRYPOINT ["java", "-jar", "app.jar"]
