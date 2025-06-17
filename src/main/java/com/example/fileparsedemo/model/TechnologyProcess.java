@@ -8,6 +8,6 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 public class TechnologyProcess {
-    private String technologyProcessName;
-    private String technologyProcessCode;
+    private ExcelCellValue technologyProcessName;
+    private ExcelCellValue technologyProcessCode;
 }

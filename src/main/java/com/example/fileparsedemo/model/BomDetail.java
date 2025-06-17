@@ -8,11 +8,11 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 public class BomDetail {
-    private String productCode;
-    private String bomLevel;
-    private String itemCode;
-    private String type;
-    private String quantity;
-    private String componentYield;
-    private String technologyProcessCode;
+    private ExcelCellValue productCode;
+    private ExcelCellValue bomLevel;
+    private ExcelCellValue itemCode;
+    private ExcelCellValue type;
+    private ExcelCellValue quantity;
+    private ExcelCellValue componentYield;
+    private ExcelCellValue technologyProcessCode;
 }

@@ -68,73 +68,73 @@ public class FileFullService {
                     result.getBomDetails(),
                     (row, detail) -> {
                         row.createCell(0).setCellValue("STT");
-                        row.createCell(1).setCellValue(detail.getBomLevel());
-                        row.createCell(2).setCellValue(detail.getItemCode());
-                        row.createCell(3).setCellValue(detail.getType());
-                        row.createCell(4).setCellValue(detail.getQuantity());
-                        row.createCell(5).setCellValue(detail.getComponentYield());
-                        row.createCell(6).setCellValue(detail.getTechnologyProcessCode());
+                        row.createCell(1).setCellValue(detail.getBomLevel().getValue());
+                        row.createCell(2).setCellValue(detail.getItemCode().getValue());
+                        row.createCell(3).setCellValue(detail.getType().getValue());
+                        row.createCell(4).setCellValue(detail.getQuantity().getValue());
+                        row.createCell(5).setCellValue(detail.getComponentYield().getValue());
+                        row.createCell(6).setCellValue(detail.getTechnologyProcessCode().getValue());
                     });
 
             writeSheet(workbook, "operation", headerStyle,
                     new String[]{"Mã CĐ", "Tên CĐ", "Nhóm CĐ", "Nhân lực", "CT(s)", "Bộ phận", "Chức năng", "Mã tổ", "Tần suất chuyển đổi LOT", "Tỉ lệ hoàn thành CĐ", "Tỉ lệ vào/ra", "Leadtime"},
                     result.getOperations(),
                     (row, op) -> {
-                        row.createCell(0).setCellValue(op.getOperationCode());
-                        row.createCell(1).setCellValue(op.getOperationName());
-                        row.createCell(2).setCellValue(op.getOperationGroup());
-                        row.createCell(3).setCellValue(op.getEmployeeQuantity());
-                        row.createCell(4).setCellValue(op.getCycleTime());
-                        row.createCell(5).setCellValue(op.getDivisionId());
-                        row.createCell(6).setCellValue(op.getEmployeeGroupCode());
-                        row.createCell(7).setCellValue(op.getTransferFrequencyLot());
-                        row.createCell(8).setCellValue(op.getCompletionRate());
-                        row.createCell(9).setCellValue(op.getCompletionRate());
-                        row.createCell(10).setCellValue(op.getInOutRatio());
-                        row.createCell(11).setCellValue(op.getLeadTime());
+                        row.createCell(0).setCellValue(op.getOperationCode().getValue());
+                        row.createCell(1).setCellValue(op.getOperationName().getValue());
+                        row.createCell(2).setCellValue(op.getOperationGroup().getValue());
+                        row.createCell(3).setCellValue(op.getEmployeeQuantity().getValue());
+                        row.createCell(4).setCellValue(op.getCycleTime().getValue());
+                        row.createCell(5).setCellValue(op.getDivisionId().getValue());
+                        row.createCell(6).setCellValue(op.getEmployeeGroupCode().getValue());
+                        row.createCell(7).setCellValue(op.getTransferFrequencyLot().getValue());
+                        row.createCell(8).setCellValue(op.getCompletionRate().getValue());
+                        row.createCell(9).setCellValue(op.getCompletionRate().getValue());
+                        row.createCell(10).setCellValue(op.getInOutRatio().getValue());
+                        row.createCell(11).setCellValue(op.getLeadTime().getValue());
                     });
 
             writeSheet(workbook, "technology_process", headerStyle,
                     new String[]{"Tên quy trình", "Mã quy trình"},
                     result.getTechnologyProcesses(),
                     (row, tp) -> {
-                        row.createCell(0).setCellValue(tp.getTechnologyProcessName());
-                        row.createCell(1).setCellValue(tp.getTechnologyProcessCode());
+                        row.createCell(0).setCellValue(tp.getTechnologyProcessName().getValue());
+                        row.createCell(1).setCellValue(tp.getTechnologyProcessCode().getValue());
                     });
 
             writeSheet(workbook, "technology_process_operation", headerStyle,
                     new String[]{"Mã quy trình công nghệ", "Mã công đoạn", "Thứ tự công đoạn", "Mô tả", "Line"},
                     result.getTechnologyProcessOperations(),
                     (row, tpo) -> {
-                        row.createCell(0).setCellValue(tpo.getTechnologyProcessCode());
-                        row.createCell(1).setCellValue(tpo.getOperationCode());
-                        row.createCell(2).setCellValue(tpo.getOperationOrder());
-                        row.createCell(3).setCellValue(tpo.getDescription());
-                        row.createCell(4).setCellValue(tpo.getOperationLine());
+                        row.createCell(0).setCellValue(tpo.getTechnologyProcessCode().getValue());
+                        row.createCell(1).setCellValue(tpo.getOperationCode().getValue());
+                        row.createCell(2).setCellValue(tpo.getOperationOrder().getValue());
+                        row.createCell(3).setCellValue(tpo.getDescription().getValue());
+                        row.createCell(4).setCellValue(tpo.getOperationLine().getValue());
                     });
 
             writeSheet(workbook, "compatibility_operation_machine", headerStyle,
                     new String[]{"Mã máy", "Độ ưu tiên", "Thời gian di chuyển (phút)"},
                     result.getCompatibilityOperationMachines(),
                     (row, com) -> {
-                        row.createCell(0).setCellValue(com.getMachineCode());
-                        row.createCell(1).setCellValue(com.getPriority());
-                        row.createCell(2).setCellValue(com.getAltTransferMinute());
+                        row.createCell(0).setCellValue(com.getMachineCode().getValue());
+                        row.createCell(1).setCellValue(com.getPriority().getValue());
+                        row.createCell(2).setCellValue(com.getAltTransferMinute().getValue());
                     });
 
             writeSheet(workbook, "products", headerStyle,
                     new String[]{"Mã hàng hóa", "Mã KH", "Tên tiếng Việt", "Tên tiếng Anh", "Dòng SP", "Loại", "Đặc tính GH", "Model", "Đơn vị"},
                     result.getProducts(),
                     (row, product) -> {
-                        row.createCell(0).setCellValue(product.getProductCode());
-                        row.createCell(1).setCellValue(product.getCustomerCode());
-                        row.createCell(2).setCellValue(product.getProductName());
-                        row.createCell(3).setCellValue(product.getProductEnName());
-                        row.createCell(4).setCellValue(product.getProductLine());
-                        row.createCell(5).setCellValue(product.getProductType());
-                        row.createCell(6).setCellValue(product.getDeliveryCharacteristicCode());
-                        row.createCell(7).setCellValue(product.getProductModel());
-                        row.createCell(8).setCellValue(product.getUnit());
+                        row.createCell(0).setCellValue(product.getProductCode().getValue());
+                        row.createCell(1).setCellValue(product.getCustomerCode().getValue());
+                        row.createCell(2).setCellValue(product.getProductName().getValue());
+                        row.createCell(3).setCellValue(product.getProductEnName().getValue());
+                        row.createCell(4).setCellValue(product.getProductLine().getValue());
+                        row.createCell(5).setCellValue(product.getProductType().getValue());
+                        row.createCell(6).setCellValue(product.getDeliveryCharacteristicCode().getValue());
+                        row.createCell(7).setCellValue(product.getProductModel().getValue());
+                        row.createCell(8).setCellValue(product.getUnit().getValue());
                     });
 
             workbook.write(out);

@@ -8,9 +8,9 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 public class ProductionProcess {
-    private String technologyProcessName;
-    private String technologyProcessCode;
-    private String operationCode;
-    private String operationOrder;
-    private String operationLine;
+    private ExcelCellValue technologyProcessName;
+    private ExcelCellValue technologyProcessCode;
+    private ExcelCellValue operationCode;
+    private ExcelCellValue operationOrder;
+    private ExcelCellValue operationLine;
 }

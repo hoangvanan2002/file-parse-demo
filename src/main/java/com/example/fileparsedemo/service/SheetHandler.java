@@ -25,7 +25,7 @@ public class SheetHandler extends DefaultHandler {
     private boolean nextIsString;
     private String currentColumn = "";
     private int currentRowIndex = -1;
-    private final Map<String, String> currentRowData = new HashMap<>();
+    private final Map<String, ExcelCellValue> currentRowData = new HashMap<>();
 
     public List<BomDetail> getBomDetails() { return bomDetails; }
     public List<Operation> getOperations() { return operations; }
@@ -60,8 +60,7 @@ public class SheetHandler extends DefaultHandler {
             String value = nextIsString
                     ? new XSSFRichTextString(sharedStringsTable.getEntryAt(Integer.parseInt(lastContents.toString()))).toString()
                     : lastContents.toString();
-
-            currentRowData.put(currentColumn, value.trim());
+            currentRowData.put(currentColumn, new ExcelCellValue(currentRowIndex, currentColumn, value.trim()));
         }
 
         if ("row".equals(name) && currentRowIndex >= 3) {
@@ -75,7 +74,6 @@ public class SheetHandler extends DefaultHandler {
     }
 
     // ----------------- Helper Methods ------------------
-
     private int parseRowIndex(String rowRef) {
         try {
             return rowRef == null ? -1 : Integer.parseInt(rowRef.replaceAll("[^0-9]", "")) - 1;
@@ -88,17 +86,17 @@ public class SheetHandler extends DefaultHandler {
         return cellRef == null ? "" : cellRef.replaceAll("[^A-Z]", "");
     }
 
-    private void handleBomDetailRow(Map<String, String> row) {
-        String productCode = row.getOrDefault("B", "");
-        String bomLevel = row.getOrDefault("C", "");
-        String itemCode = row.getOrDefault("D", "");
-        String type = row.getOrDefault("E", "");
-        String quantity = row.getOrDefault("F", "");
-        String componentYield = row.getOrDefault("G", "");
-        String technologyProcessCode = row.getOrDefault("H", "");
+    private void handleBomDetailRow(Map<String, ExcelCellValue> row) {
+        ExcelCellValue productCode = row.getOrDefault("B", null);
+        ExcelCellValue bomLevel = row.getOrDefault("C", null);
+        ExcelCellValue itemCode = row.getOrDefault("D", null);
+        ExcelCellValue type = row.getOrDefault("E", null);
+        ExcelCellValue quantity = row.getOrDefault("F", null);
+        ExcelCellValue componentYield = row.getOrDefault("G", null);
+        ExcelCellValue technologyProcessCode = row.getOrDefault("H", null);
 
-        if (hasAnyNonBlank(bomLevel, itemCode, type, quantity,
-                componentYield, technologyProcessCode)) {
+        if (hasAnyNonBlank(bomLevel.getValue(), itemCode.getValue(), type.getValue(), quantity.getValue(),
+                componentYield.getValue(), technologyProcessCode.getValue())) {
             bomDetails.add(BomDetail.builder()
                     .productCode(productCode)
                     .bomLevel(bomLevel)
@@ -111,23 +109,24 @@ public class SheetHandler extends DefaultHandler {
         }
     }
 
-    private void handleOperationRow(Map<String, String> row) {
-        String operationCode = row.getOrDefault("N", "");
-        String operationName = row.getOrDefault("O", "");
-        String operationGroup = row.getOrDefault("P", "");
-        String employeeQuantity = row.getOrDefault("Q", "");
-        String cycleTime = row.getOrDefault("R", "");
-        String divisionId = row.getOrDefault("S", "");
-        String employeeGroupCode = row.getOrDefault("U", "");
-        String transferFrequencyLot = row.getOrDefault("V", "");
-        String completionRate = row.getOrDefault("W", "");
-        String inOutRatio = row.getOrDefault("X", "");
-        String leadTime = row.getOrDefault("Y", "");
-        String machineGroupCode = row.getOrDefault("Z", "");
+    private void handleOperationRow(Map<String, ExcelCellValue> row) {
+        ExcelCellValue operationCode = row.getOrDefault("N", null);
+        ExcelCellValue operationName = row.getOrDefault("O", null);
+        ExcelCellValue operationGroup = row.getOrDefault("P", null);
+        ExcelCellValue employeeQuantity = row.getOrDefault("Q", null);
+        ExcelCellValue cycleTime = row.getOrDefault("R", null);
+        ExcelCellValue divisionId = row.getOrDefault("S", null);
+        ExcelCellValue employeeGroupCode = row.getOrDefault("U", null);
+        ExcelCellValue transferFrequencyLot = row.getOrDefault("V", null);
+        ExcelCellValue completionRate = row.getOrDefault("W", null);
+        ExcelCellValue inOutRatio = row.getOrDefault("X", null);
+        ExcelCellValue leadTime = row.getOrDefault("Y", null);
+        ExcelCellValue machineGroupCode = row.getOrDefault("Z", null);
 
-        if (hasAnyNonBlank(operationCode, operationName, operationGroup, employeeQuantity, cycleTime,
-                divisionId, employeeGroupCode, transferFrequencyLot, completionRate,
-                inOutRatio, leadTime, machineGroupCode)) {
+        if (hasAnyNonBlank(operationCode.getValue(), operationName.getValue(), operationGroup.getValue(),
+                employeeQuantity.getValue(), cycleTime.getValue(), divisionId.getValue(),
+                employeeGroupCode.getValue(), transferFrequencyLot.getValue(), completionRate.getValue(),
+                inOutRatio.getValue(), leadTime.getValue(), machineGroupCode.getValue())) {
 
             operations.add(Operation.builder()
                     .operationCode(operationCode)
@@ -146,10 +145,10 @@ public class SheetHandler extends DefaultHandler {
         }
     }
 
-    private void handleTechnologyProcessRow(Map<String, String> row) {
-        String technologyProcessName = row.getOrDefault("I", "");
-        String technologyProcessCode = row.getOrDefault("J", "");
-        if(hasAnyNonBlank(technologyProcessName, technologyProcessCode)){
+    private void handleTechnologyProcessRow(Map<String, ExcelCellValue> row) {
+        ExcelCellValue technologyProcessName = row.getOrDefault("I", null);
+        ExcelCellValue technologyProcessCode = row.getOrDefault("J", null);
+        if(hasAnyNonBlank(technologyProcessName.getValue(), technologyProcessCode.getValue())){
             technologyProcesses.add(TechnologyProcess.builder()
                     .technologyProcessName(technologyProcessName)
                     .technologyProcessCode(technologyProcessCode)
@@ -157,13 +156,14 @@ public class SheetHandler extends DefaultHandler {
         }
     }
 
-    private void handleTechnologyProcessOperationRow(Map<String, String> row) {
-        String technologyProcessCode = row.getOrDefault("J", "");
-        String operationCode = row.getOrDefault("K", "");;
-        String operationOrder = row.getOrDefault("L", "");;
-        String description = "";
-        String operationLine = row.getOrDefault("H", "");;
-        if(hasAnyNonBlank(technologyProcessCode, operationCode, operationOrder, description, operationLine)){
+    private void handleTechnologyProcessOperationRow(Map<String, ExcelCellValue> row) {
+        ExcelCellValue technologyProcessCode = row.getOrDefault("J", null);
+        ExcelCellValue operationCode = row.getOrDefault("K", null);
+        ExcelCellValue operationOrder = row.getOrDefault("L", null);
+        ExcelCellValue description = new ExcelCellValue("", null, "");
+        ExcelCellValue operationLine = row.getOrDefault("H", null);
+        if(hasAnyNonBlank(technologyProcessCode.getValue(), operationCode.getValue(),
+                operationOrder.getValue(), description.getValue(), operationLine.getValue())){
             technologyProcessOperations.add(TechnologyProcessOperation.builder()
                     .technologyProcessCode(technologyProcessCode)
                     .operationCode(operationCode)
@@ -174,11 +174,11 @@ public class SheetHandler extends DefaultHandler {
         }
     }
 
-    private void handleCompatibilityOperationMachineRow(Map<String, String> row) {
-        String machineCode = row.getOrDefault("AA", "");
-        String priority= row.getOrDefault("AC", "");
-        String altTransferMinute = row.getOrDefault("AE", "");
-        if(hasAnyNonBlank(machineCode, priority, altTransferMinute)){
+    private void handleCompatibilityOperationMachineRow(Map<String, ExcelCellValue> row) {
+        ExcelCellValue machineCode = row.getOrDefault("AA", null);
+        ExcelCellValue priority= row.getOrDefault("AC", null);
+        ExcelCellValue altTransferMinute = row.getOrDefault("AE", null);
+        if(hasAnyNonBlank(machineCode.getValue(), priority.getValue(), altTransferMinute.getValue())){
             compatibilityOperationMachines.add(CompatibilityOperationMachine.builder()
                     .machineCode(machineCode)
                     .altTransferMinute(altTransferMinute)
@@ -187,18 +187,20 @@ public class SheetHandler extends DefaultHandler {
         }
     }
 
-    private void handleProductsRow(Map<String, String> row) {
-        String productCode = row.getOrDefault("AG", "");
-        String customerCode = row.getOrDefault("AH", "");
-        String productName = row.getOrDefault("AI", "");
-        String productEnName = row.getOrDefault("AJ", "");
-        String productLine = row.getOrDefault("AK", "");
-        String productType = row.getOrDefault("AL", "");
-        String deliveryCharacteristicCode = row.getOrDefault("AM", "");
-        String productModel = row.getOrDefault("AN", "");
-        String productUnit = row.getOrDefault("AO", "");
-        if(hasAnyNonBlank(productCode, customerCode, productName, productEnName,
-                productLine, productType, deliveryCharacteristicCode, productModel)){
+    private void handleProductsRow(Map<String, ExcelCellValue> row) {
+        ExcelCellValue productCode = row.getOrDefault("AG", null);
+        ExcelCellValue customerCode = row.getOrDefault("AH", null);
+        ExcelCellValue productName = row.getOrDefault("AI", null);
+        ExcelCellValue productEnName = row.getOrDefault("AJ", null);
+        ExcelCellValue productLine = row.getOrDefault("AK", null);
+        ExcelCellValue productType = row.getOrDefault("AL", null);
+        ExcelCellValue deliveryCharacteristicCode = row.getOrDefault("AM", null);
+        ExcelCellValue productModel = row.getOrDefault("AN", null);
+        ExcelCellValue productUnit = row.getOrDefault("AO", null);
+        if(hasAnyNonBlank(productCode.getValue(), customerCode.getValue(),
+                productName.getValue(), productEnName.getValue(),
+                productLine.getValue(), productType.getValue(),
+                deliveryCharacteristicCode.getValue(), productModel.getValue())){
             products.add(Products.builder()
                     .productCode(productCode)
                     .customerCode(customerCode)

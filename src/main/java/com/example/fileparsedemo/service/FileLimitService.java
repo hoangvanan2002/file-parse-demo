@@ -38,77 +38,76 @@ public class FileLimitService {
             centerStyle.setVerticalAlignment(VerticalAlignment.CENTER);
 
             writeSheet(workbook, "bom_detail", headerStyle,
-                    new String[]{"STT", "Bom Level", "Item Code", "Item Type", "Quantity", "Tỷ lệ hao hụt (%)", "Quy trình"},
+                    new String[]{"STT", "Bom Level", "Item Code", "Item Type", "Quantity",
+                            "Tỷ lệ hao hụt (%)", "Quy trình"},
                     result.getBomDetails(), (row, detail) -> {
                         row.createCell(0).setCellValue("");
-                        if(detail.getBomLevel().equals("")) row.createCell(1).setCellValue("");
-                        else row.createCell(1).setCellValue(Double.parseDouble(detail.getBomLevel()));
-                        row.createCell(2).setCellValue(detail.getItemCode());
-                        row.createCell(3).setCellValue(detail.getType());
-                        if(detail.getQuantity().equals("")) row.createCell(1).setCellValue("");
-                        else row.createCell(4).setCellValue(Double.parseDouble(detail.getQuantity()));
-                        if(detail.getComponentYield().equals("")) row.createCell(1).setCellValue("");
-                        else row.createCell(5).setCellValue(Double.parseDouble(detail.getComponentYield()));
-                        row.createCell(6).setCellValue(detail.getTechnologyProcessCode());
+                        row.createCell(1).setCellValue(detail.getBomLevel().getValue());
+                        row.createCell(2).setCellValue(detail.getItemCode().getValue());
+                        row.createCell(3).setCellValue(detail.getType().getValue());
+                        row.createCell(4).setCellValue(detail.getQuantity().getValue());
+                        row.createCell(5).setCellValue(detail.getComponentYield().getValue());
+                        row.createCell(6).setCellValue(detail.getTechnologyProcessCode().getValue());
                     });
             writeSheet(workbook, "operation", headerStyle,
                     new String[]{"Mã CĐ", "Tên CĐ", "Nhóm CĐ", "Nhân lực", "CT(s)", "Bộ phận", "Chức năng", "Mã tổ", "Tần suất chuyển đổi LOT", "Tỉ lệ hoàn thành CĐ", "Tỉ lệ vào/ra", "Leadtime"},
                     result.getOperations(),
                     (row, op) -> {
-                        row.createCell(0).setCellValue(op.getOperationCode());
-                        row.createCell(1).setCellValue(op.getOperationName());
-                        row.createCell(2).setCellValue(op.getOperationGroup());
-                        row.createCell(4).setCellValue(op.getCycleTime());
-                        row.createCell(5).setCellValue(op.getDivisionId());
-                        row.createCell(6).setCellValue(op.getEmployeeGroupCode());
-                        row.createCell(7).setCellValue(op.getTransferFrequencyLot());
-                        row.createCell(8).setCellValue(op.getCompletionRate());
-                        row.createCell(9).setCellValue(op.getCompletionRate());
-                        row.createCell(10).setCellValue(op.getInOutRatio());
-                        row.createCell(11).setCellValue(op.getLeadTime());
+                        row.createCell(0).setCellValue(op.getOperationCode().getValue());
+                        row.createCell(1).setCellValue(op.getOperationName().getValue());
+                        row.createCell(2).setCellValue(op.getOperationGroup().getValue());
+                        row.createCell(3).setCellValue(op.getEmployeeQuantity().getValue());
+                        row.createCell(4).setCellValue(op.getCycleTime().getValue());
+                        row.createCell(5).setCellValue(op.getDivisionId().getValue());
+                        row.createCell(6).setCellValue(op.getEmployeeGroupCode().getValue());
+                        row.createCell(7).setCellValue(op.getTransferFrequencyLot().getValue());
+                        row.createCell(8).setCellValue(op.getCompletionRate().getValue());
+                        row.createCell(9).setCellValue(op.getCompletionRate().getValue());
+                        row.createCell(10).setCellValue(op.getInOutRatio().getValue());
+                        row.createCell(11).setCellValue(op.getLeadTime().getValue());
                     });
 
             writeSheet(workbook, "technology_process", headerStyle,
                     new String[]{"Tên quy trình", "Mã quy trình"},
                     result.getTechnologyProcesses(),
                     (row, tp) -> {
-                        row.createCell(0).setCellValue(tp.getTechnologyProcessName());
-                        row.createCell(1).setCellValue(tp.getTechnologyProcessCode());
+                        row.createCell(0).setCellValue(tp.getTechnologyProcessName().getValue());
+                        row.createCell(1).setCellValue(tp.getTechnologyProcessCode().getValue());
                     });
 
             writeSheet(workbook, "technology_process_operation", headerStyle,
                     new String[]{"Mã quy trình công nghệ", "Mã công đoạn", "Thứ tự công đoạn", "Mô tả", "Line"},
                     result.getTechnologyProcessOperations(),
                     (row, tpo) -> {
-                        row.createCell(0).setCellValue(tpo.getTechnologyProcessCode());
-                        row.createCell(1).setCellValue(tpo.getOperationCode());
-                        row.createCell(2).setCellValue(tpo.getOperationOrder());
-                        row.createCell(3).setCellValue(tpo.getDescription());
-                        row.createCell(4).setCellValue(tpo.getOperationLine());
+                        row.createCell(0).setCellValue(tpo.getTechnologyProcessCode().getValue());
+                        row.createCell(1).setCellValue(tpo.getOperationCode().getValue());
+                        row.createCell(2).setCellValue(tpo.getOperationOrder().getValue());
+                        row.createCell(3).setCellValue(tpo.getDescription().getValue());
+                        row.createCell(4).setCellValue(tpo.getOperationLine().getValue());
                     });
 
             writeSheet(workbook, "compatibility_operation_machine", headerStyle,
                     new String[]{"Mã máy", "Độ ưu tiên", "Thời gian di chuyển (phút)"},
                     result.getCompatibilityOperationMachines(),
                     (row, com) -> {
-                        row.createCell(0).setCellValue(com.getMachineCode());
-                        row.createCell(1).setCellValue(com.getPriority());
-                        row.createCell(2).setCellValue(com.getAltTransferMinute());
+                        row.createCell(0).setCellValue(com.getMachineCode().getValue());
+                        row.createCell(1).setCellValue(com.getPriority().getValue());
+                        row.createCell(2).setCellValue(com.getAltTransferMinute().getValue());
                     });
 
             writeSheet(workbook, "products", headerStyle,
                     new String[]{"Mã hàng hóa", "Mã KH", "Tên tiếng Việt", "Tên tiếng Anh", "Dòng SP", "Loại", "Đặc tính GH", "Model", "Đơn vị"},
                     result.getProducts(),
                     (row, product) -> {
-                        row.createCell(0).setCellValue(product.getProductCode());
-                        row.createCell(1).setCellValue(product.getCustomerCode());
-                        row.createCell(2).setCellValue(product.getProductName());
-                        row.createCell(3).setCellValue(product.getProductEnName());
-                        row.createCell(4).setCellValue(product.getProductLine());
-                        row.createCell(5).setCellValue(product.getProductType());
-                        row.createCell(6).setCellValue(product.getDeliveryCharacteristicCode());
-                        row.createCell(7).setCellValue(product.getProductModel());
-                        row.createCell(8).setCellValue(product.getUnit());
+                        row.createCell(0).setCellValue(product.getProductCode().getValue());
+                        row.createCell(1).setCellValue(product.getCustomerCode().getValue());
+                        row.createCell(2).setCellValue(product.getProductName().getValue());
+                        row.createCell(3).setCellValue(product.getProductEnName().getValue());
+                        row.createCell(4).setCellValue(product.getProductLine().getValue());
+                        row.createCell(5).setCellValue(product.getProductType().getValue());
+                        row.createCell(6).setCellValue(product.getDeliveryCharacteristicCode().getValue());
+                        row.createCell(7).setCellValue(product.getProductModel().getValue());
+                        row.createCell(8).setCellValue(product.getUnit().getValue());
                     });
             try (ByteArrayOutputStream out = new ByteArrayOutputStream()) {
                 workbook.write(out);
@@ -177,15 +176,15 @@ public class FileLimitService {
                 if (row == null) continue;
 
                 // BomDetail
-                String productCode = getCellValue(row, "B", evaluator);
-                String bomLevel = getCellValue(row, "C", evaluator);
-                String itemCode = getCellValue(row, "D", evaluator);
-                String type = getCellValue(row, "E", evaluator);
-                String quantity = getCellValue(row, "F", evaluator);
-                String componentYield = getCellValue(row, "G", evaluator);
-                String technologyProcessCode = getCellValue(row, "H", evaluator);
-
-                if (hasAnyNonBlank(bomLevel, itemCode, type, quantity, componentYield, technologyProcessCode)) {
+                ExcelCellValue productCode = new ExcelCellValue("B", i, getCellValue(row, "B", evaluator));
+                ExcelCellValue bomLevel= new ExcelCellValue("C", i, getCellValue(row, "C", evaluator));
+                ExcelCellValue itemCode = new ExcelCellValue("D", i, getCellValue(row, "D", evaluator));
+                ExcelCellValue type = new ExcelCellValue("E", i, getCellValue(row, "E", evaluator));
+                ExcelCellValue quantity = new ExcelCellValue("F", i, getCellValue(row, "F", evaluator));
+                ExcelCellValue componentYield = new ExcelCellValue("G", i, getCellValue(row, "G", evaluator));
+                ExcelCellValue technologyProcessCode = new ExcelCellValue("H", i, getCellValue(row, "H", evaluator));
+                if (hasAnyNonBlank(bomLevel.getValue(), itemCode.getValue(), type.getValue(), quantity.getValue(),
+                        componentYield.getValue(), technologyProcessCode.getValue())) {
                     bomDetails.add(BomDetail.builder()
                             .productCode(productCode)
                             .bomLevel(bomLevel)
@@ -198,20 +197,22 @@ public class FileLimitService {
                 }
 
                 // Operation
-                String operationCode = getCellValue(row, "N", evaluator);
-                String operationName = getCellValue(row, "O", evaluator);
-                String operationGroup = getCellValue(row, "P", evaluator);
-                String employeeQuantity = getCellValue(row, "Q", evaluator);
-                String cycleTime = getCellValue(row, "R", evaluator);
-                String divisionId = getCellValue(row, "S", evaluator);
-                String employeeGroupCode = getCellValue(row, "U", evaluator);
-                String transferFrequencyLot = getCellValue(row, "V", evaluator);
-                String completionRate = getCellValue(row, "W", evaluator);
-                String inOutRatio = getCellValue(row, "X", evaluator);
-                String leadTime = getCellValue(row, "Y", evaluator);
-                String machineGroupCode = getCellValue(row, "Z", evaluator);
-
-                if (hasAnyNonBlank(operationCode, operationName, operationGroup, employeeQuantity, cycleTime, divisionId, employeeGroupCode, transferFrequencyLot, completionRate, inOutRatio, leadTime, machineGroupCode)) {
+                ExcelCellValue operationCode = new ExcelCellValue("N", i, getCellValue(row, "N", evaluator));
+                ExcelCellValue operationName = new ExcelCellValue("O", i, getCellValue(row, "O", evaluator));
+                ExcelCellValue operationGroup = new ExcelCellValue("P", i, getCellValue(row, "P", evaluator));
+                ExcelCellValue employeeQuantity = new ExcelCellValue("Q", i, getCellValue(row, "Q", evaluator));
+                ExcelCellValue cycleTime = new ExcelCellValue("R", i, getCellValue(row, "R", evaluator));
+                ExcelCellValue divisionId = new ExcelCellValue("S", i, getCellValue(row, "S", evaluator));
+                ExcelCellValue employeeGroupCode = new ExcelCellValue("U", i, getCellValue(row, "U", evaluator));
+                ExcelCellValue transferFrequencyLot = new ExcelCellValue("V", i, getCellValue(row, "V", evaluator));
+                ExcelCellValue completionRate = new ExcelCellValue("W", i, getCellValue(row, "W", evaluator));
+                ExcelCellValue inOutRatio = new ExcelCellValue("X", i, getCellValue(row, "X", evaluator));
+                ExcelCellValue leadTime = new ExcelCellValue("Y", i, getCellValue(row, "Y", evaluator));
+                ExcelCellValue machineGroupCode = new ExcelCellValue("Z", i, getCellValue(row, "Z", evaluator));
+                if (hasAnyNonBlank(operationCode.getValue(), operationName.getValue(), operationGroup.getValue(),
+                        employeeQuantity.getValue(), cycleTime.getValue(), divisionId.getValue(), employeeGroupCode.getValue(),
+                        transferFrequencyLot.getValue(), completionRate.getValue(), inOutRatio.getValue(),
+                        leadTime.getValue(), machineGroupCode.getValue())) {
                     operations.add(Operation.builder()
                             .operationCode(operationCode)
                             .operationName(operationName)
@@ -229,9 +230,9 @@ public class FileLimitService {
                 }
 
                 // TechnologyProcess
-                String technologyProcessName = getCellValue(row, "I", evaluator);
-                String technologyProcessCode1 = getCellValue(row, "J", evaluator);
-                if (hasAnyNonBlank(technologyProcessName, technologyProcessCode1)) {
+                ExcelCellValue technologyProcessName = new ExcelCellValue("I", i, getCellValue(row, "I", evaluator));
+                ExcelCellValue technologyProcessCode1 = new ExcelCellValue("J", i, getCellValue(row, "J", evaluator));
+                if (hasAnyNonBlank(technologyProcessName.getValue(), technologyProcessCode1.getValue())) {
                     technologyProcessList.add(TechnologyProcess.builder()
                             .technologyProcessName(technologyProcessName)
                             .technologyProcessCode(technologyProcessCode1)
@@ -239,12 +240,13 @@ public class FileLimitService {
                 }
 
                 // TechnologyProcessOperation
-                String technologyProcessCode2 = getCellValue(row, "J", evaluator);
-                String operationCode2 = getCellValue(row, "K", evaluator);
-                String operationOrder = getCellValue(row, "L", evaluator);
-                String description = "";
-                String operationLine = getCellValue(row, "H", evaluator);
-                if (hasAnyNonBlank(technologyProcessCode2, operationCode2, operationOrder, operationLine)) {
+                ExcelCellValue technologyProcessCode2 = new ExcelCellValue("J", i, getCellValue(row, "J", evaluator));
+                ExcelCellValue operationCode2 = new ExcelCellValue("K", i, getCellValue(row, "K", evaluator));
+                ExcelCellValue operationOrder = new ExcelCellValue("L", i, getCellValue(row, "L", evaluator));
+                ExcelCellValue description = new ExcelCellValue("", i, "");
+                ExcelCellValue operationLine = new ExcelCellValue("H", i, getCellValue(row, "H", evaluator));
+                if (hasAnyNonBlank(technologyProcessCode2.getValue(), operationCode2.getValue(),
+                        operationOrder.getValue(), operationLine.getValue())) {
                     technologyProcessOperationList.add(TechnologyProcessOperation.builder()
                             .technologyProcessCode(technologyProcessCode2)
                             .operationCode(operationCode2)
@@ -255,10 +257,10 @@ public class FileLimitService {
                 }
 
                 // CompatibilityOperationMachine
-                String machineCode = getCellValue(row, "AA", evaluator);
-                String priority = getCellValue(row, "AC", evaluator);
-                String altTransferMinute = getCellValue(row, "AE", evaluator);
-                if (hasAnyNonBlank(machineCode, priority, altTransferMinute)) {
+                ExcelCellValue machineCode = new ExcelCellValue("AA", i, getCellValue(row, "AA", evaluator));
+                ExcelCellValue priority = new ExcelCellValue("AC", i, getCellValue(row, "AC", evaluator));
+                ExcelCellValue altTransferMinute = new ExcelCellValue("AE", i, getCellValue(row, "AE", evaluator));
+                if (hasAnyNonBlank(machineCode.getValue(), priority.getValue(), altTransferMinute.getValue())) {
                     compatibilityOperationMachineList.add(CompatibilityOperationMachine.builder()
                             .machineCode(machineCode)
                             .altTransferMinute(altTransferMinute)
@@ -267,17 +269,18 @@ public class FileLimitService {
                 }
 
                 // Products
-                String productCode1 = getCellValue(row, "AG", evaluator);
-                String customerCode = getCellValue(row, "AH", evaluator);
-                String productName = getCellValue(row, "AI", evaluator);
-                String productEnName = getCellValue(row, "AJ", evaluator);
-                String productLine = getCellValue(row, "AK", evaluator);
-                String productType = getCellValue(row, "AL", evaluator);
-                String deliveryCharacteristicCode = getCellValue(row, "AM", evaluator);
-                String productModel = getCellValue(row, "AN", evaluator);
-                String productUnit = getCellValue(row, "AO", evaluator);
-
-                if (hasAnyNonBlank(productCode1, customerCode, productName, productEnName, productLine, productType, deliveryCharacteristicCode, productModel, productUnit)) {
+                ExcelCellValue productCode1 = new ExcelCellValue("AG", i, getCellValue(row, "AG", evaluator));
+                ExcelCellValue customerCode = new ExcelCellValue("AH", i, getCellValue(row, "AH", evaluator));
+                ExcelCellValue productName = new ExcelCellValue("AI", i, getCellValue(row, "AI", evaluator));
+                ExcelCellValue productEnName = new ExcelCellValue("AJ", i, getCellValue(row, "AJ", evaluator));
+                ExcelCellValue productLine = new ExcelCellValue("AK", i, getCellValue(row, "AK", evaluator));
+                ExcelCellValue productType = new ExcelCellValue("AL", i, getCellValue(row, "AL", evaluator));
+                ExcelCellValue deliveryCharacteristicCode = new ExcelCellValue("AM", i, getCellValue(row, "AM", evaluator));
+                ExcelCellValue productModel = new ExcelCellValue("AN", i, getCellValue(row, "AN", evaluator));
+                ExcelCellValue productUnit = new ExcelCellValue("AO", i, getCellValue(row, "AO", evaluator));
+                if (hasAnyNonBlank(productCode1.getValue(), customerCode.getValue(), productName.getValue(),
+                        productEnName.getValue(), productLine.getValue(), productType.getValue(),
+                        deliveryCharacteristicCode.getValue(), productModel.getValue(), productUnit.getValue())) {
                     productsList.add(Products.builder()
                             .productCode(productCode1)
                             .customerCode(customerCode)
@@ -286,6 +289,7 @@ public class FileLimitService {
                             .productType(productType)
                             .deliveryCharacteristicCode(deliveryCharacteristicCode)
                             .productModel(productModel)
+                            .productLine(productLine)
                             .unit(productUnit)
                             .build());
                 }

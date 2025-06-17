@@ -8,16 +8,16 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 public class Operation {
-    private String operationCode;
-    private String operationName;
-    private String operationGroup;
-    private String employeeQuantity;
-    private String cycleTime;
-    private String divisionId;
-    private String employeeGroupCode;
-    private String transferFrequencyLot;
-    private String completionRate;
-    private String inOutRatio;
-    private String leadTime;
-    private String machineGroupCode;
+    private ExcelCellValue operationCode;
+    private ExcelCellValue operationName;
+    private ExcelCellValue operationGroup;
+    private ExcelCellValue employeeQuantity;
+    private ExcelCellValue cycleTime;
+    private ExcelCellValue divisionId;
+    private ExcelCellValue employeeGroupCode;
+    private ExcelCellValue transferFrequencyLot;
+    private ExcelCellValue completionRate;
+    private ExcelCellValue inOutRatio;
+    private ExcelCellValue leadTime;
+    private ExcelCellValue machineGroupCode;
 }

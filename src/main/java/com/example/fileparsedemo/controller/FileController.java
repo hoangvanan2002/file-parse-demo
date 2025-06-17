@@ -21,11 +21,19 @@ public class FileController {
     private final FileFullService fileFullService;
     private final FileLimitService fileLimitService;
 
-    @GetMapping("/api/v1/file/download")
-    public ResponseEntity<?> importFile(@RequestParam("file") MultipartFile file) throws Exception {
+    @PostMapping("/api/v1/file/download")
+    public ResponseEntity<?> importFile(@RequestParam("file") MultipartFile file){
         try {
-            ResultResponse result = fileLimitService.readExcelFile(file);
-            byte[] excelData = fileLimitService.writeExcelFile(file, result);
+            byte[] excelData;
+            long sizeInBytes = file.getSize();
+            long maxLimit = 2 * 1024 * 1024; // 2MB
+            if(sizeInBytes <= maxLimit){
+                ResultResponse result = fileLimitService.readExcelFile(file);
+                excelData = fileLimitService.writeExcelFile(file, result);
+            } else{
+                ResultResponse result = fileFullService.readFileXlsx(file);
+                excelData = fileFullService.writeFileXlsx(result);
+            }
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.parseMediaType(
                     "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
@@ -37,7 +45,7 @@ public class FileController {
         }
     }
 
-    @GetMapping("/api/v2/file/download")
+    @PostMapping("/api/v2/file/download")
     public ResponseEntity<byte[]> downloadExcel(@RequestParam("file") MultipartFile file) {
         try {
             ResultResponse result = fileFullService.readFileXlsx(file);
@@ -51,5 +59,10 @@ public class FileController {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
+    }
+
+    @GetMapping("/test")
+    public String test(){
+        return "tesssssss";
     }
 }

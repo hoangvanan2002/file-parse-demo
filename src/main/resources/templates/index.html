@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Excel parse</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: #f8f9fa;
+        }
+        .upload-box {
+            max-width: 500px;
+            margin: 100px auto;
+            padding: 30px;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+        }
+        .spinner-border {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+<div class="upload-box">
+    <div class="text-center mb-4">
+        <img src="https://facenet.vn/wp-content/uploads/2025/04/logo-facenet.jpg" alt="logo" class="w-75">
+    </div>
+    <div class="mb-3">
+        <label for="excelFile" class="form-label">Chọn file Excel (.xlsx hoặc .xls)</label>
+        <input class="form-control" type="file" id="excelFile" accept=".xlsx,.xls">
+        <div class="form-text text-danger d-none" id="fileError">Vui lòng chọn file Excel hợp lệ.</div>
+    </div>
+
+    <button class="btn btn-primary w-100" id="submitBtn">
+        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+        <span class="btn-text">Xác nhận & xử lý</span>
+    </button>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $("#submitBtn").click(function () {
+            const fileInput = $("#excelFile")[0];
+            const file = fileInput.files[0];
+            const errorText = $("#fileError");
+            const spinner = $(".spinner-border");
+            const btnText = $(".btn-text");
+
+            if (!file || !(/\.(xlsx|xls)$/i).test(file.name)) {
+                errorText.removeClass("d-none");
+                return;
+            }
+
+            errorText.addClass("d-none");
+            spinner.show();
+            btnText.text("Đang xử lý...");
+
+            const formData = new FormData();
+            formData.append("file", file);
+
+            $.ajax({
+                url: "/api/v1/file/download", // API xử lý file và trả về file kết quả
+                type: "POST",
+                data: formData,
+                contentType: false,
+                processData: false,
+                xhrFields: {
+                    responseType: 'blob' // Nhận file dạng blob
+                },
+                success: function (blob, status, xhr) {
+                    // Tạo tên file từ header hoặc fallback
+                    const disposition = xhr.getResponseHeader('Content-Disposition');
+                    let filename = "ket_qua.xlsx";
+                    if (disposition && disposition.indexOf("filename=") !== -1) {
+                        filename = disposition.split("filename=")[1].replace(/['"]/g, "");
+                    }
+
+                    const url = window.URL.createObjectURL(blob);
+                    const a = document.createElement("a");
+                    a.href = url;
+                    a.download = filename;
+                    document.body.appendChild(a);
+                    a.click();
+                    window.URL.revokeObjectURL(url);
+                    a.remove();
+                },
+                error: function () {
+                    alert("Đã xảy ra lỗi khi xử lý hoặc tải file.");
+                },
+                complete: function () {
+                    spinner.hide();
+                    btnText.text("Xác nhận & xử lý");
+                }
+            });
+        });
+    });
+</script>
+
+</body>
+</html>

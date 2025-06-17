@@ -8,7 +8,7 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 public class CompatibilityOperationMachine {
-    private String machineCode;
-    private String priority;
-    private String altTransferMinute;
+    private ExcelCellValue machineCode;
+    private ExcelCellValue priority;
+    private ExcelCellValue altTransferMinute;
 }
